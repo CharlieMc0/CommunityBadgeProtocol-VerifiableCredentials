@@ -1,0 +1,62 @@
+
+
+.header {
+    height: 88px;
+    width: 100%;
+}
+
+.content {
+    position: relative;
+    border-right: 1px solid #DBDBDB;
+    min-width: 250px;
+    max-width: 250px;
+    height: 100%;
+    text-align: left;
+}
+
+.side-bar-link {
+    transition: all 0.2s ease;
+    margin: 28px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #787486;
+    cursor: pointer;
+}
+
+
+.side-bar-link:hover {
+    color: darkgrey;
+}
+
+.thoughts-box {
+    position: absolute;
+    bottom: 0px;
+    padding: 16px;
+    text-align: center;
+    margin: 20px 20px 32px 20px;
+    background: #f5f5f5;
+    border-radius: 30px;
+}
+
+.thoughts-box b {
+    font-size: 14px;
+}
+.thoughts-box p {
+    font-size: 14px;
+    color:  #787486;
+}
+
+button {
+    transition: all 0.2s ease;
+    padding: 12px;
+    cursor: pointer;
+    background: white;
+    border: none;
+}
+
+button:hover {
+    background: #e4e4e4;
+}
+

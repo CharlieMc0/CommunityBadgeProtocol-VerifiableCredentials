@@ -1,0 +1,52 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400&display=swap');
+
+html, body {
+  font-family: 'Inter', sans-serif;
+}
+
+html, body, #root, .app-wrapper, #root .app .app-row {
+  height: 100%;
+}
+
+.app {
+  height: calc(100% - 54px);
+}
+
+.app-row {
+  display: flex;
+  width: 100%;
+}
+
+.app-col {
+  flex-grow: 1;
+}
+
+.app {
+  background: white;
+  border-radius: 20px;
+}
+
+.line-break {
+  border-bottom: 1px solid #DBDBDB;
+}
+
+.gutter {
+  margin: 20px;
+}
+
+.app-wrapper {
+  padding: 24px 24px 24px 24px;
+  background: #e4e4e4;
+}
+
+.header {
+  height: 88px;
+  width: 100%;
+  flex-grow: 1;
+}
+
+.header.main {
+  display: flex;
+  align-items: center;
+}
