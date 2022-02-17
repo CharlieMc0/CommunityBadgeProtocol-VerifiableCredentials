@@ -13,3 +13,7 @@ p {
     color: #787486;
     font-size: 16px;
 }
+
+.settings-panel-wrapper {
+    display: flex;
+}

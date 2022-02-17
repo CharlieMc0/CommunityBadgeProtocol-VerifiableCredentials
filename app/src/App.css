@@ -7,10 +7,12 @@ html, body {
 
 html, body, #root, .app-wrapper, #root .app .app-row {
   height: 100%;
+  min-height: 100%;
 }
 
 .app {
   height: calc(100% - 54px);
+  min-height: calc(100% - 54px);
 }
 
 .app-row {
