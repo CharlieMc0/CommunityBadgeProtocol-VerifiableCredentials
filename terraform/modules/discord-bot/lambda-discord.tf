@@ -78,6 +78,8 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
 
   # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
-  source_arn = "${aws_api_gateway_rest_api.discord_bot.execution_arn}/*/*/${var.project_name}-discord"
+  # source_arn = "${aws_api_gateway_rest_api.discord_bot.execution_arn}/*/*/${var.project_name}-discord"
+  source_arn = "${aws_api_gateway_rest_api.discord_bot.execution_arn}/*/*/*"
+
 
 }

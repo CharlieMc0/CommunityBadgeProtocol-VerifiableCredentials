@@ -1,6 +1,7 @@
 // const PREFIX = "Returned error: VM Exception while processing transaction: ";
 // const PREFIX = "Error: ";
-const PREFIX = "Transaction: ";
+// const PREFIX = "Transaction: ";
+const PREFIX = "Awards: ";
 
 // Todo - Figure out why the errors don't report back from solidity as exepcted 
 
@@ -25,5 +26,6 @@ module.exports = {
     catchStaticStateChange : async function(promise) {await tryCatch(promise, "static state change");},
     catchAll               : async function(promise) {await tryCatch(promise, ""                      );},
     catchTransfer               : async function(promise) {await tryCatch(promise, ""                      );},
+    catchAward               : async function(promise) {await tryCatch(promise, "Award"                      );},
 
 };

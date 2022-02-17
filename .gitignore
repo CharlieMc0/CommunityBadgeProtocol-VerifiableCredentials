@@ -34,5 +34,4 @@ override.tf.json
 secrets*
 __pycache__
 
-1155.sol 
 node_modules
