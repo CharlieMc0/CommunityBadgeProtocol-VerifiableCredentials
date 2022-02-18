@@ -12,9 +12,9 @@ from boto3.dynamodb.conditions import Key
 
 from typing import SupportsComplex
 from web3 import Web3
-import pprint 
-from solcx import compile_source
-pp = pprint.PrettyPrinter(indent=4)
+# import pprint 
+# from solcx import compile_source
+# pp = pprint.PrettyPrinter(indent=4)
 
 w3 = Web3(Web3.HTTPProvider('https://rinkeby.infura.io/v3/ca42c79b2cd64cd59b28c04c06df2a6f'))
 contract_abi = json.loads('contract-abi.json')

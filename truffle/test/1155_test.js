@@ -1,7 +1,5 @@
 const BadgesERC1155 = artifacts.require("BadgesERC1155");
 
-
-
 contract("BadgesERC1155", accounts => {
     let catchRevert = require("./1155exceptions.js").catchRevert;
     let catchAll = require("./1155exceptions.js").catchAll;
@@ -25,6 +23,17 @@ contract("BadgesERC1155", accounts => {
         let token2Balance = await badges.balanceOf(accounts[2], 2);
         assert.equal(token1Balance, 1);
         assert.equal(token2Balance, 2);
+    });
+
+    it("Should retrive corret URI", async() => {
+        let badges = await BadgesERC1155.deployed();
+
+        // Create New Badges
+        token1uri = await badges.uri(1);
+        token2uri = await badges.uri(2);
+
+        assert.equal(token1uri, "www.metadata.com/1.json");
+        assert.equal(token2uri, "www.metadata.com/2.json");
 
     });
 

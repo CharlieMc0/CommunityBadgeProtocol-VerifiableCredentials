@@ -17,7 +17,7 @@ contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
     mapping(uint256 => uint256) private _totalSupply;
     mapping(uint256 => uint256) private badgeLimit;
     mapping(uint256 => string) private badgeName;
-    mapping(uint256 => string) private baseURI;
+    mapping(uint256 => string) private tokenURIs;
     mapping(uint256 => mapping(address => uint256)) private _balances;
     string public name = "BadgesERC1155";
     bytes32 private constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
@@ -52,8 +52,7 @@ contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
         badgeCreators[_id] = msg.sender; // replace with role
         badgeLimit[_id] = _badgeLimit;
         badgeName[_id] = _name;
-        baseURI[_id] = _uri;
-
+        tokenURIs[_id] = _uri;
         return _id;
     }
 
@@ -95,6 +94,10 @@ contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
      */
     function _getNextTokenID() private view returns (uint256) {
         return _currentTokenID + 1;
+    }
+
+    function uri(uint256 id) public view virtual override returns (string memory) {
+        return tokenURIs[id];
     }
 
     /**

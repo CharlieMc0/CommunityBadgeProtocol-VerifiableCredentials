@@ -82,18 +82,6 @@ def lambda_handler(event, context):
             except Exception as e:
                 return return_message(str(e))
 
-            # print("test")
-            # if command_name == "vote":
-            #     nominated_user = message_body['data']['options'][0]
-            #     vote = message_body['channel_id']
-            #     return return_message("Your vote has been cast")
-
-            # elif command_name == "nomiate":
-            #     return return_message("They've been nominated!!")
-
-            # elif command_name == "configure-server":
-            #     return return_message("Server Has Been Configured")
-
             if command_name == "community-badges":
                 subcommand = message_body['data']['options'][0]['name']
 
@@ -159,7 +147,7 @@ def send_nomination_message(message, nominated_user, badge_name, nominating_user
             },
             {
                 "title": "How to Vote?",
-                "description": "To enter your vote us the `/vote` slash command and select `For` if you support their nomination for the award or `Against` if you don't believe they deserve an award.",
+                "description": "To enter your vote us the `/community-badges vote` slash command, tag the nomimanted person, and select `For` if you support their nomination for the award or `Against` if you don't believe they deserve an award.",
                 "color": 5814783
             }
         ]
