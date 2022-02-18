@@ -21,7 +21,7 @@ contract_abi = json.loads('contract-abi.json')
 
 
 # TODO - Pull from SSM directly 
-from secrets.py import wallet_private_key, owner_wallet_address
+from secrets import wallet_private_key, owner_wallet_address
 
 ssm = boto3.client('ssm')
 # owner_wallet_address = ssm.get_parameter(Name='/ethdenver-hackathon/eth_wallet_address', WithDecryption=True)

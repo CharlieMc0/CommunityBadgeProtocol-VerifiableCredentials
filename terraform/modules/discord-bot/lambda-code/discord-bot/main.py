@@ -18,7 +18,7 @@ from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
 import requests
 
-VALID_COMMANDS = ["update_settings", "configure-server",
+VALID_COMMANDS = ["update_settings", "configure-server", "community-badges",
                   "nominate", "vote", "excellence-award", "create-new-badge"]
 PUBLIC_KEY = "dc97e0657388f3d069db1abe14d18d86a0aba728822894ac0c235d80d386b416"
 
@@ -94,7 +94,7 @@ def lambda_handler(event, context):
             # elif command_name == "configure-server":
             #     return return_message("Server Has Been Configured")
 
-            if command_name == "excellence-award":
+            if command_name == "community-badges":
                 subcommand = message_body['data']['options'][0]['name']
 
                 print(f"server_config: {server_config}")

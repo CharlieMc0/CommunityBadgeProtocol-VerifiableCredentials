@@ -233,5 +233,4 @@ def delete_command(command_id):
 add_command_group()
 
 # delete_command("943266707496140892")
-
 # delete_command("943334738477862923")
