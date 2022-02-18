@@ -13,7 +13,7 @@ import os
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
-
+import requests
 
 VALID_COMMANDS = ["update_settings", "configure-server", "nominate", "vote", "excellence-award"]
 PUBLIC_KEY = "dc97e0657388f3d069db1abe14d18d86a0aba728822894ac0c235d80d386b416"
@@ -98,7 +98,6 @@ def lambda_handler(event, context):
                 if subcommand == "vote":
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     vote = message_body['data']['options'][0]['options'][1]['value']
-                    user_id = message_body['member']['user']['id']
 
                     nomination_id = server_config['NominationId']
 
@@ -112,7 +111,11 @@ def lambda_handler(event, context):
 
                 elif subcommand == "nominate":
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
+                    user_id = message_body['member']['user']['id']
+
+                    badge_name = "BADGE NAME "
                     print(f"nominated_user: {nominated_user}")
+                    send_webook("message", nominated_user, badge_name, user_id)
                     return return_message("They have been nominated!! -- Nomination ID = 0000")
 
     except Exception as e:
@@ -122,9 +125,31 @@ def lambda_handler(event, context):
             'body': json.dumps("ERROR PROCESSING COMMAND")
         }
 
+def send_webook(message, nominated_user, badge_name, nominating_user, webhook_url=None):
+    if webhook_url is None:
+        webhook_url = "https://discord.com/api/webhooks/943906356967141467/IKKQLxvW3DKF326oYFACVocith4LhHpPwjbfoUIcmFRMRhEIpvm-ONctIL_ZfQWrQVtL"
+    if badge_name is None:
+        badge_name = "FILLER"
+    data = {
+  "content": "** <%s> Has Been Nominated For A Badge!**\n\\\n <%s> has been nominated for the %s Badge. They were nominated by <%s> because STUFF." %( nominated_user, nominated_user, badge_name, nominating_user),
+  "embeds": [
+    {
+      "title": "What's A Community Badge?",
+      "description": "Community Badges are ERC1155 tokens that are created and managed by an organization. Your community is responsible for nominating and voting for a person or group to win the award. Specifics regarding the award such as name, description, quantity available, and who's eligible to receive have been configured by your community leaders. \n\nThe voting period is open for 24 hours. After this time the votes will be tallied and an award may be issued.",
+      "color": 5814783
+    },
+    {
+      "title": "How to Vote?",
+      "description": "To enter your vote us the `/vote` slash command and select `For` if you support their nomination for the award or `Against` if you don't believe they deserve an award.",
+      "color": 5814783
+    }
+  ]
+}
 
-
-
+    r = requests.post(webhook_url, data=json.dumps(data), headers={'Content-Type': 'application/json'})
+    
+    
+    
 def get_server_config(discord_server_id, dynamodb=None, table=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb')

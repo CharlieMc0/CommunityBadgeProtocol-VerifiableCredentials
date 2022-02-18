@@ -24,7 +24,7 @@ contract ProxyRegistry {
   mapping(address => OwnableDelegateProxy) public proxies;
 }
 
-contract Award is ERC721 {
+contract Badge is ERC721 {
     // using SafeMath for uint256;
     using Strings for uint256;
     using Counters for Counters.Counter;
@@ -34,7 +34,7 @@ contract Award is ERC721 {
 
     Counters.Counter private _id;
 
-    // struct AwardMetadata {
+    // struct BadgeMetadata {
     //     string name;
     //     string description;
     //     string url;
@@ -45,13 +45,13 @@ contract Award is ERC721 {
     //     string issuedToUserId;
     // }
 
-    // mapping (uint256 => AwardMetadata) metadata;
+    // mapping (uint256 => BadgeMetadata) metadata;
 
     mapping (uint256 => string) tokenURIs;
 
-    constructor( ) ERC721("Excellence Award", "AWARD") {}
+    constructor( ) ERC721("Excellence Badge", "BADGE") {}
 
-    function mintAward(address _recipient, string calldata  _uri) external payable {
+    function mintBadge(address _recipient, string calldata  _uri) external payable {
         
         _id.increment();
         uint256 current_id = _id.current();
@@ -71,7 +71,7 @@ contract Award is ERC721 {
     }
 
     function transferFrom ( address from, address to, uint256 tokenId) public virtual override {
-        require(from == address(0), "Awards are not transferable");
+        require(from == address(0), "Badges are not transferable");
         _transfer(from, to, tokenId);
     }
     // function setAllowList(address[] calldata addresses, uint256 numAllowedToMint) external  {

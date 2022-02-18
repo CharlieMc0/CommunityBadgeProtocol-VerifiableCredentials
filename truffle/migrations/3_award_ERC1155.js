@@ -1,5 +1,5 @@
-const AwardsERC1155 = artifacts.require("AwardsERC1155");
+const BadgesERC1155 = artifacts.require("BadgesERC1155");
 
 module.exports = function (deployer) {
-  deployer.deploy(AwardsERC1155);
+  deployer.deploy(BadgesERC1155);
 };

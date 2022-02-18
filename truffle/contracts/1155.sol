@@ -10,49 +10,48 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol"; // 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract AwardsERC1155 is ERC1155, AccessControl, ERC1155Supply {
+contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
     using SafeMath for uint256;
     uint256 private _currentTokenID = 0;
-    mapping(uint256 => address) public awardCreators;
+    mapping(uint256 => address) public badgeCreators;
     mapping(uint256 => uint256) private _totalSupply;
-    mapping(uint256 => uint256) private awardLimit;
-    mapping(uint256 => string) private awardName;
+    mapping(uint256 => uint256) private badgeLimit;
+    mapping(uint256 => string) private badgeName;
     mapping(uint256 => string) private baseURI;
     mapping(uint256 => mapping(address => uint256)) private _balances;
-    string public name = "AwardsERC1155";
+    string public name = "BadgesERC1155";
     bytes32 private constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
-    // TODO - Setup roles for each award ID
+    // TODO - Setup roles for each badge ID
 
-    constructor() ERC1155("AwardsERC1155") {
+    constructor() ERC1155("BadgesERC1155") {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
     // Events
-
     /**
      * @dev Require msg.sender to be the creator of the token id
-     * Should be replaced with a ROLE for each token ID (Award Type)
+     * Should be replaced with a ROLE for each token ID (Badge Type)
      */
     modifier onlyCreator(uint256 _id) {
         require(
-            awardCreators[_id] == msg.sender,
+            badgeCreators[_id] == msg.sender,
             "ERC1155Tradable#onlyCreator: ONLY_creator_ALLOWED"
         );
         _;
     }
 
-    function createNewAward(
-        uint256 _awardLimit,
+    function createNewBadge(
+        uint256 _badgeLimit,
         string calldata _name,
         string calldata _uri
     ) external returns (uint256) {
         uint256 _id = _getNextTokenID();
         _incrementTokenTypeId();
 
-        awardCreators[_id] = msg.sender; // replace with role
-        awardLimit[_id] = _awardLimit;
-        awardName[_id] = _name;
+        badgeCreators[_id] = msg.sender; // replace with role
+        badgeLimit[_id] = _badgeLimit;
+        badgeName[_id] = _name;
         baseURI[_id] = _uri;
 
         return _id;
@@ -65,29 +64,29 @@ contract AwardsERC1155 is ERC1155, AccessControl, ERC1155Supply {
         bytes memory data
     ) public onlyCreator(id) {
         require(
-            _totalSupply[id] + amount <= awardLimit[id],
+            _totalSupply[id] + amount <= badgeLimit[id],
             "NFTy1155#mint: TOKEN_MAX_SUPPLY_EXCEEDED"
         );
         _totalSupply[id] = _totalSupply[id] += amount;
         _mint(account, id, amount, data);
     }
 
-    function setAwardOwner(address _to, uint256[] memory _ids) public {
+    function setBadgeOwner(address _to, uint256[] memory _ids) public {
         require(
             _to != address(0),
-            "ERC1155Tradable#setAwardOwner: INVALID_ADDRESS."
+            "ERC1155Tradable#setBadgeOwner: INVALID_ADDRESS."
         );
         for (uint256 i = 0; i < _ids.length; i++) {
             uint256 id = _ids[i];
-            _setAwardOwner(_to, id);
+            _setBadgeOwner(_to, id);
         }
     }
 
-    function _setAwardOwner(address _to, uint256 _id)
+    function _setBadgeOwner(address _to, uint256 _id)
         internal
         onlyCreator(_id)
     {
-        awardCreators[_id] = _to;
+        badgeCreators[_id] = _to;
     }
 
     /**
@@ -113,7 +112,7 @@ contract AwardsERC1155 is ERC1155, AccessControl, ERC1155Supply {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual override(ERC1155, ERC1155Supply) {
-        require(from == address(0), "Awards are not transferable");
+        require(from == address(0), "Badges are not transferable");
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
