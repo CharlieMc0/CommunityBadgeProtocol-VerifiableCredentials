@@ -1,8 +1,11 @@
 
-# TODO 
+# TODO
 # Try to avoid such as big list of if/else statements
-# See if the UI/UX within Discord can be improved 
-# Setup logic for end of voting period 
+# See if the UI/UX within Discord can be improved
+# Setup logic for end of voting period
+# Better error checking
+# Mint new badge 
+# Send link to claim badge 
 
 from logging import raiseExceptions
 import boto3
@@ -15,7 +18,8 @@ from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
 import requests
 
-VALID_COMMANDS = ["update_settings", "configure-server", "nominate", "vote", "excellence-award"]
+VALID_COMMANDS = ["update_settings", "configure-server",
+                  "nominate", "vote", "excellence-award", "create-new-badge"]
 PUBLIC_KEY = "dc97e0657388f3d069db1abe14d18d86a0aba728822894ac0c235d80d386b416"
 
 access_token = os.environ['ACCESS_TOKEN']
@@ -105,18 +109,32 @@ def lambda_handler(event, context):
                     print(f"vote: {vote}")
                     print(f"user_id: {user_id}")
 
-                    add_vote_to_table(server_id, nomination_id, nominated_user, user_id, vote)
+                    add_vote_to_table(server_id, nomination_id,
+                                      nominated_user, user_id, vote)
 
                     return return_message("Your vote has been cast")
 
                 elif subcommand == "nominate":
-                    nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     user_id = message_body['member']['user']['id']
+                    nominated_user = message_body['data']['options'][0]['options'][0]['value']
+                    badge_name = message_body['data']['options'][0]['options'][1]['value']
+                    nomination_reason = message_body['data']['options'][0]['options'][2]['value']
 
-                    badge_name = "BADGE NAME "
                     print(f"nominated_user: {nominated_user}")
-                    send_webook("message", nominated_user, badge_name, user_id)
-                    return return_message("They have been nominated!! -- Nomination ID = 0000")
+                    send_nomination_message(
+                        nomination_reason, nominated_user, badge_name, user_id)
+                    return return_message("Nomination Complete")
+
+                elif subcommand == "create-new-badge":
+                    user_id = message_body['member']['user']['id']
+                    badge_name = message_body['data']['options'][0]['options'][0]['value']
+                    badge_description = message_body['data']['options'][0]['options'][1]['value']
+
+                    # TODO - Mint Badge
+
+                    send_new_badge_message(badge_name, badge_description, user_id, webhook_url=None)
+
+                    return return_message("Badge Creation Complete")
 
     except Exception as e:
         print(e)
@@ -125,31 +143,58 @@ def lambda_handler(event, context):
             'body': json.dumps("ERROR PROCESSING COMMAND")
         }
 
-def send_webook(message, nominated_user, badge_name, nominating_user, webhook_url=None):
+
+def send_nomination_message(message, nominated_user, badge_name, nominating_user, webhook_url=None):
+    print(nominating_user)
+    print(nominated_user)
     if webhook_url is None:
         webhook_url = "https://discord.com/api/webhooks/943906356967141467/IKKQLxvW3DKF326oYFACVocith4LhHpPwjbfoUIcmFRMRhEIpvm-ONctIL_ZfQWrQVtL"
-    if badge_name is None:
-        badge_name = "FILLER"
     data = {
-  "content": "** <%s> Has Been Nominated For A Badge!**\n\\\n <%s> has been nominated for the %s Badge. They were nominated by <%s> because STUFF." %( nominated_user, nominated_user, badge_name, nominating_user),
-  "embeds": [
-    {
-      "title": "What's A Community Badge?",
-      "description": "Community Badges are ERC1155 tokens that are created and managed by an organization. Your community is responsible for nominating and voting for a person or group to win the award. Specifics regarding the award such as name, description, quantity available, and who's eligible to receive have been configured by your community leaders. \n\nThe voting period is open for 24 hours. After this time the votes will be tallied and an award may be issued.",
-      "color": 5814783
-    },
-    {
-      "title": "How to Vote?",
-      "description": "To enter your vote us the `/vote` slash command and select `For` if you support their nomination for the award or `Against` if you don't believe they deserve an award.",
-      "color": 5814783
+        "content": f"** {nominated_user} Has Been Nominated For The {badge_name} Badge!**\n They were nominated by <@{nominating_user}> because {message}",
+        "embeds": [
+            {
+                "title": "What's A Community Badge?",
+                "description": "Community Badges are ERC1155 tokens that are created and managed by an organization. Your community is responsible for nominating and voting for a person or group to win the award. Specifics regarding the award such as name, description, quantity available, and who's eligible to receive have been configured by your community leaders. \n\nThe voting period is open for 24 hours. After this time the votes will be tallied and an award may be issued.",
+                "color": 5814783
+            },
+            {
+                "title": "How to Vote?",
+                "description": "To enter your vote us the `/vote` slash command and select `For` if you support their nomination for the award or `Against` if you don't believe they deserve an award.",
+                "color": 5814783
+            }
+        ]
     }
-  ]
-}
 
-    r = requests.post(webhook_url, data=json.dumps(data), headers={'Content-Type': 'application/json'})
-    
-    
-    
+    r = requests.post(webhook_url, data=json.dumps(
+        data), headers={'Content-Type': 'application/json'})
+
+
+def send_new_badge_message(badge_name, badge_description, user_id, webhook_url=None):
+    try:
+        if webhook_url is None:
+            webhook_url = "https://discord.com/api/webhooks/943906356967141467/IKKQLxvW3DKF326oYFACVocith4LhHpPwjbfoUIcmFRMRhEIpvm-ONctIL_ZfQWrQVtL"
+        data = {
+            "content": f"** A New Badge Has Been Created!**\n <@{user_id}> created the {badge_name} Badge.",
+            "embeds": [
+                {
+                    "title": "The {} Badge".format(badge_name),
+                    "description": "{}".format(badge_description),
+                    "color": 5814783
+                },
+                {
+                    "title": "What's A Community Badge?",
+                    "description": "Community Badges are ERC1155 tokens that are created and managed by an organization. Your community is responsible for nominating and voting for a person or group to win the award. Specifics regarding the award such as name, description, quantity available, and who's eligible to receive have been configured by your community leaders. \n\nThe voting period is open for 24 hours. After this time the votes will be tallied and an award may be issued.",
+                    "color": 5814783
+                }
+            ]
+        }
+
+        r = requests.post(webhook_url, data=json.dumps(
+            data), headers={'Content-Type': 'application/json'})
+    except Exception as e:
+        print(e)
+
+
 def get_server_config(discord_server_id, dynamodb=None, table=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb')
@@ -169,7 +214,8 @@ def get_server_config(discord_server_id, dynamodb=None, table=None):
 
     except Exception as e:
         raise Exception(e)
-        
+
+
 def verify_discord_role(message_body, valid_role_id):
     roles = message_body['member']['roles']
     print(roles)
@@ -192,12 +238,12 @@ def validate_command(command):
 
 
 def increment_vote_id(server_id, vote_id, dynamodb=None, table=None):
-    try: 
+    try:
         if not dynamodb:
             dynamodb = boto3.resource('dynamodb')
         if not table:
             table = dynamodb.Table(votes_table_name)
-        ## TODO - Need a safer way to increment the vote id
+        # TODO - Need a safer way to increment the vote id
         vote_id += 1
         response = table.update_item(
             Item={
@@ -216,6 +262,7 @@ def increment_vote_id(server_id, vote_id, dynamodb=None, table=None):
         raise Exception(
             "Sorry, something went wrong. Please tag an admin")
 
+
 def add_vote_to_table(server_id, vote_id, nominated_user_id, voter_id, vote, dynamodb=None, table=None):
     try:
         if not dynamodb:
@@ -231,7 +278,7 @@ def add_vote_to_table(server_id, vote_id, nominated_user_id, voter_id, vote, dyn
             YesVote = ""
         else:
             raise ValueError("Invalid Vote")
-              
+
         response = table.put_item(
             Item={
                 'ServerId': server_id,
@@ -249,10 +296,10 @@ def add_vote_to_table(server_id, vote_id, nominated_user_id, voter_id, vote, dyn
 
     except Exception as e:
         print(e)
-        raise Exception( "Sorry, something went wrong. Please tag an admin")
+        raise Exception("Sorry, something went wrong. Please tag an admin")
 
 
-##### 
+#####
 def add_wallet_to_db(wallet_address, discord_userid, dynamodb=None, table=None):
     try:
         if not dynamodb:
@@ -277,7 +324,6 @@ def add_wallet_to_db(wallet_address, discord_userid, dynamodb=None, table=None):
         print(e)
         raise Exception(
             "Sorry, something went wrong. Please tag an admin")
-
 
 
 # def get_user_wallet(discord_userid, dynamodb=None, table=None):
@@ -335,21 +381,24 @@ def check_for_duplicate_wallet_addresses(wallet_address, dynamodb=None, table=No
     except Exception as e:
         raise(e)
 
+
 def check_item_count():
     try:
         dynamodb = boto3.client('dynamodb')
         table = dynamodb.describe_table(
             TableName=config_table_name
-            )
+        )
         item_count = table['Table']['ItemCount']
 
         if item_count >= whitelist_capacity:
-            raise ValueError("The whitelist is full. No more addresses can be added.")
+            raise ValueError(
+                "The whitelist is full. No more addresses can be added.")
         else:
             return
 
     except Exception as e:
         raise(e)
+
 
 def white_list_wallet_address(message_body, wallet_address, discord_userid):
     try:
@@ -395,5 +444,4 @@ def check_status(message_body, discord_userid, dynamodb=None, table=None):
         check_if_user_exists(discord_userid, dynamodb=None, table=None)
         return "You are eligible to whitelist but haven't done so yet. Use \"/whitelist add-wallet\" to do so. "
     except ValueError as e:
-         return "Your wallet has already been whitelisted"
-   
+        return "Your wallet has already been whitelisted"

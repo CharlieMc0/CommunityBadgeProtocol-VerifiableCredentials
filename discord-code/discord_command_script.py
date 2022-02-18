@@ -127,8 +127,8 @@ def nominate():
 
 def add_command_group():
     json = {
-        "name": "excellence-award",
-        "description": "Nominate or vote on an excellence award",
+        "name": "community-badges",
+        "description": "Nominate or vote a member for a community badge or award",
         "options": [
             {
                 "name": "nominate",
@@ -167,7 +167,7 @@ def add_command_group():
                     },
                     {
                         "name": "your_vote",
-                        "description": "Are you voting in favor or against their nomination for excellence?",
+                        "description": "Are you voting in favor or against their nomination?",
                         "type": 3,
                         "required": True,
                         "choices": [
@@ -232,5 +232,6 @@ def delete_command(command_id):
 # nominate()
 add_command_group()
 
-# delete_command("935699121757630516")
-# delete_command("935698594734952468")
+# delete_command("943266707496140892")
+
+# delete_command("943334738477862923")

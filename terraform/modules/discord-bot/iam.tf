@@ -70,3 +70,8 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch" { // TODO - Replac
   role       = aws_iam_role.discord_bot.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "lambda_ssm_ro" { // TODO - Replace with more specific role 
+  role       = aws_iam_role.discord_bot.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+}
