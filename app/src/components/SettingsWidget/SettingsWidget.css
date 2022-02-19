@@ -67,3 +67,7 @@ input[type="file"] {
 .toggle-button.selected {
     background-color: lightgray;
 }
+
+.file-name {
+    text-align: center;
+}
