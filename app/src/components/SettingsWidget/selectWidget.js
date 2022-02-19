@@ -1,15 +1,13 @@
 function SelectWidget(props) {
 
-    // on select
-
     return (
         <div className="widget-wrapper">
 
             <div className="custom-select">
-            <select>
+            <select onChange={e => props.update({ dataValue: e.target.value, dataKey: props.dataKey })}>
                 {
                     props.options.map((opt, index) => {
-                        return <option key={index} value={index}>{opt}</option>
+                        return <option key={index} value={opt}>{opt}</option>
                     })
                 }
             </select>

@@ -5,7 +5,7 @@ function TextAreaWidget(props) {
     return (
         <div className="widget-wrapper">
 
-            <textarea />
+            <textarea onChange={e => props.update({ dataValue: e.target.value, dataKey: props.dataKey })} />
 
         </div>
     );
