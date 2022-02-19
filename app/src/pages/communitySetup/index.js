@@ -23,18 +23,18 @@ function CommunitySetUp() {
   };
 
   async function postDataEvt(url = '', data = {}) {
-    // Default options are marked with *
     const response = await fetch(url, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      body: JSON.stringify(data)
     });
-    return response.json(); // parses JSON response into native JavaScript objects
+    return response.json();
   }
 
   const postForm = () => {  
-    postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', postData)
+    postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', 
+    JSON.stringify(postData))
       .then(data => {
         console.log(data);
       }).catch(err => {
