@@ -8,7 +8,7 @@ const Contract = artifacts.require("Badge");
 
 // // TODO - Add isApprovedForAll Tests
 
-contract("Contract", (accounts) => {
+contract("BadgesERC721", (accounts) => {
   let catchRevert = require("./exceptions.js").catchRevert;
   let catchAll = require("./exceptions.js").catchAll;
 

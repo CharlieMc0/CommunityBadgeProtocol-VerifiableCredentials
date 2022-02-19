@@ -11,7 +11,7 @@ resource "aws_lambda_layer_version" "min_layer" {
   compatible_runtimes = ["python3.7"]
   # source_code_hash = filebase64("${path.module}/lambda-code/zips/lambda-layer.zip")
   
-  # lifecycle { // TODO - Fix so it only rebuild when the lambda code changes
+  # lifecycle { 
   #   ignore_changes = all
   # }
 }
@@ -30,7 +30,7 @@ resource "null_resource" "discord_bot_zip" {
     uuid = uuid()
   }
 
-  # lifecycle { // TODO - Fix so it only rebuild when the lambda code changes
+  # lifecycle {
   #   ignore_changes = all
   # }
 }

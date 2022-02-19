@@ -12,12 +12,11 @@ from boto3.dynamodb.conditions import Key
 
 from typing import SupportsComplex
 from web3 import Web3
-# import pprint 
-# from solcx import compile_source
-# pp = pprint.PrettyPrinter(indent=4)
 
 w3 = Web3(Web3.HTTPProvider('https://rinkeby.infura.io/v3/ca42c79b2cd64cd59b28c04c06df2a6f'))
-contract_abi = json.loads('contract-abi.json')
+
+abi_file = open('contract-abi.json')
+contract_abi = json.load(abi_file)
 
 
 # TODO - Pull from SSM directly 
@@ -33,7 +32,7 @@ ssm = boto3.client('ssm')
 # my_contractAddress = os.environ['CONTRACT_ADDRESS']
 
 
-my_contractAddress = ""
+my_contractAddress = "0x11660c7bc676E9453C9Aa957eaE55845c9C8D619"
 
 my_contract = w3.eth.contract(address=my_contractAddress, abi=contract_abi)
 
@@ -87,10 +86,10 @@ def create_new_token(badge_limit, badge_name, badge_uri):
     # Do Something to publish the  attributes to IPFS
     return hash 
 
-def mint(to_address, token_id, amount=1, data=[]):
+def mint(to_address, token_id, amount=1):
     ## Create a transaction and sign it 
-    transaction = my_contract.functions.createNewBadge(to_address, token_id, amount, []).buildTransaction({
-        'value': w3.toWei('.0', 'ether'),
+    transaction = my_contract.functions.mint(to_address, token_id, amount, '').buildTransaction({
+        'value': 0,
         'chainId': chain_id,
         'gas': 300000,
         'maxFeePerGas': w3.toWei('2', 'gwei'),
@@ -102,3 +101,7 @@ def mint(to_address, token_id, amount=1, data=[]):
     wait_for_tx(hash)  
     # Do Something to publish the  attributes to IPFS
     return hash 
+
+
+# create_new_token(0, "Super Badge", "s3.com/1.json")
+# mint("0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A", 1)

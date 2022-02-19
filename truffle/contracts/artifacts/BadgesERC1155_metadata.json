@@ -637,7 +637,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "id",
 						"type": "uint256"
 					}
 				],
@@ -694,9 +694,6 @@
 				},
 				"totalSupply(uint256)": {
 					"details": "Total amount of tokens in with a given id."
-				},
-				"uri(uint256)": {
-					"details": "See {IERC1155MetadataURI-uri}. This implementation returns the same URI for *all* token types. It relies on the token type ID substitution mechanism https://eips.ethereum.org/EIPS/eip-1155#metadata[defined in the EIP]. Clients calling this function must replace the `\\{id\\}` substring with the actual token type ID."
 				}
 			},
 			"version": 1
@@ -836,11 +833,11 @@
 			]
 		},
 		"truffle/contracts/1155.sol": {
-			"keccak256": "0xc746c564c3b13436928277d9f2c08e22ba311ba6ba3853e31a96d88b66fc270c",
+			"keccak256": "0xf953ea27958721d2e2609ef1b3f966204045e0800563aed7b2fb1ae7784b4669",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a601f65e573b6490297b5e92021891248d7ac858c09d96b2191a2428c979e4ec",
-				"dweb:/ipfs/QmNuX4ZDLZF2cFyb7tEtR2JxH6iz7W3sAjFGH5kRdhGAr1"
+				"bzz-raw://827796236b1a845905c74db76c5af0c510637e3f1b97353dfdea7343d984eb46",
+				"dweb:/ipfs/QmcWH13otCeWmmHtUrfiHD2JSiSR6REqAaAz5o4aQZg3Wx"
 			]
 		}
 	},

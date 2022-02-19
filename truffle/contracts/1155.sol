@@ -61,15 +61,19 @@ contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) public onlyCreator(id) {
-        require(
-            _totalSupply[id] + amount <= badgeLimit[id],
-            "NFTy1155#mint: TOKEN_MAX_SUPPLY_EXCEEDED"
-        );
-        _totalSupply[id] = _totalSupply[id] += amount;
+    ) public onlyCreator(id) { // Change to use a role allowing multiple minters
+        uint256 token_limit = badgeLimit[id];
+        if (token_limit != 0) {
+            require(
+                _totalSupply[id] + amount <= token_limit,
+                "NFTy1155#mint: TOKEN_MAX_SUPPLY_EXCEEDED"
+            );
+        }
+        _totalSupply[id] += amount;
         _mint(account, id, amount, data);
     }
 
+    // Change a role allowing multiple minters
     function setBadgeOwner(address _to, uint256[] memory _ids) public {
         require(
             _to != address(0),
@@ -88,10 +92,7 @@ contract BadgesERC1155 is ERC1155, AccessControl, ERC1155Supply {
         badgeCreators[_id] = _to;
     }
 
-    /**
-     * @dev calculates the next token ID based on value of _currentTokenID
-     * @return uint256 for the next token ID
-     */
+    // This seems unnecessary, could use a naked counter instead. 
     function _getNextTokenID() private view returns (uint256) {
         return _currentTokenID + 1;
     }

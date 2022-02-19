@@ -2,3 +2,4 @@ regex
 requests
 pynacl
 boto3
+web3

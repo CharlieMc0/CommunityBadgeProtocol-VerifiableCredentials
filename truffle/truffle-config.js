@@ -66,6 +66,14 @@ module.exports = {
       gas: 500000,
       gasPrice: 1000000000
 },
+  skale: {
+    provider: function() { 
+    return new HDWalletProvider(process.env.SKALEPRIVKEY, "wss://hack-proxy-0.skalenodes.com/v1/ws/glamorous-tania-australis");
+    },
+    network_id: 0xb15fea6e2e4ad,
+    // gas: 6000000,
+    // gasPrice: 10000000000,
+  },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -94,17 +102,17 @@ module.exports = {
   },
 
   // Set default mocha options here, use special reporters etc.
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions : { 
-      currency: 'USD',
-      token: 'ETH',
-      onlyCalledMethods: true,
-      excludeContracts: [],
-      gasPrice: 100,
-      coinmarketcap: "9b39d8f5-c600-42b5-add1-3a8dc3fc52f5" // TODO - API Keys should be securely stored!
-     }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions : { 
+  //     currency: 'USD',
+  //     token: 'ETH',
+  //     onlyCalledMethods: true,
+  //     excludeContracts: [],
+  //     gasPrice: 100,
+  //     coinmarketcap: "9b39d8f5-c600-42b5-add1-3a8dc3fc52f5" // TODO - API Keys should be securely stored!
+  //    }
+  // },
 
   // Configure your compilers
   compilers: {

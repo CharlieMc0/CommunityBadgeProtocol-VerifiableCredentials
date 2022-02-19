@@ -15,8 +15,8 @@ contract("BadgesERC1155", accounts => {
         await badges.createNewBadge(30, "Best Badge", "www.metadata.com/3.json");
 
         // Mint Tokens
-        await badges.mint(accounts[1], 1, 1, [], {from: accounts[0]});
-        await badges.mint(accounts[2], 2, 2, [], {from: accounts[0]});
+        await badges.mint(accounts[1], 1, 1, []);
+        await badges.mint(accounts[2], 2, 2, []);
 
         // Check Balances
         let token1Balance = await badges.balanceOf(accounts[1], 1);

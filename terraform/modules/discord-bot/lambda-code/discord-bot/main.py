@@ -1,11 +1,12 @@
 
 # TODO
+# Move awary from Lambda Proxy and setup an improved API endpoint
 # Try to avoid such as big list of if/else statements
 # See if the UI/UX within Discord can be improved
 # Setup logic for end of voting period
 # Better error checking
-# Mint new badge 
 # Send link to claim badge 
+# Connurecy checking to make sure nominate ID is incrementing correctly 
 
 from logging import raiseExceptions
 import boto3
@@ -17,6 +18,7 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
 import requests
+from chain_functions import mint, create_new_token, publish_metadata
 
 VALID_COMMANDS = ["update_settings", "configure-server", "community-badges",
                   "nominate", "vote", "excellence-award", "create-new-badge"]
@@ -25,7 +27,7 @@ PUBLIC_KEY = "dc97e0657388f3d069db1abe14d18d86a0aba728822894ac0c235d80d386b416"
 access_token = os.environ['ACCESS_TOKEN']
 config_table_name = os.environ['SERVER_CONFIG_TABLE']
 votes_table_name = os.environ['VOTE_TABLE']
-
+base_uri = "Uri.com/"
 
 def lambda_handler(event, context):
 
@@ -107,18 +109,27 @@ def lambda_handler(event, context):
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     badge_name = message_body['data']['options'][0]['options'][1]['value']
                     nomination_reason = message_body['data']['options'][0]['options'][2]['value']
+                    nomination_id = server_config['NominationId'] + 1
 
                     print(f"nominated_user: {nominated_user}")
                     send_nomination_message(
                         nomination_reason, nominated_user, badge_name, user_id)
-                    return return_message("Nomination Complete")
+                    return return_message("Nomination Complete" + nomination_id )
 
                 elif subcommand == "create-new-badge":
                     user_id = message_body['member']['user']['id']
                     badge_name = message_body['data']['options'][0]['options'][0]['value']
                     badge_description = message_body['data']['options'][0]['options'][1]['value']
+                    badge_uri = base_uri + server_id + server_config['NominationId']
+                    try:
+                        badge_limit = message_body['data']['options'][0]['options'][2]['value']
+                    except Exception as e:
+                        print(e)
+                        badge_limit = 0
+
 
                     # TODO - Mint Badge
+                    create_new_token(badge_limit, badge_name, badge_uri)
 
                     send_new_badge_message(badge_name, badge_description, user_id, webhook_url=None)
 
@@ -285,6 +296,7 @@ def add_vote_to_table(server_id, vote_id, nominated_user_id, voter_id, vote, dyn
     except Exception as e:
         print(e)
         raise Exception("Sorry, something went wrong. Please tag an admin")
+
 
 
 #####
