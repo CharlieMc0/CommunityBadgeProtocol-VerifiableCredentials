@@ -2,7 +2,7 @@
 
 .header {
     height: 88px;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .content {
@@ -10,7 +10,6 @@
     border-right: 1px solid #DBDBDB;
     min-width: 250px;
     max-width: 250px;
-    height: 100%;
     text-align: left;
 }
 
@@ -23,6 +22,10 @@
     line-height: 19px;
     color: #787486;
     cursor: pointer;
+}
+
+.active {
+    color: black;
 }
 
 

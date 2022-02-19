@@ -7,6 +7,7 @@ function SettingsWidget(props) {
         <h2>{props.title}</h2>
         <p>{props.description}</p>
         
+        {props.children}
     </div>
   );
 }

@@ -6,6 +6,7 @@
     background: #f5f5f5;
     border-radius: 30px;
     text-align: left;
+    max-width: 290px;
 }
 
 .settings-panel b {
@@ -25,7 +26,7 @@ button {
 }
 
 .line-break-purple {
-    border-bottom: 2px solid #800080;
+    border-bottom: 2px solid #5030e5;
 }
 
 .line-break-orange {
@@ -51,7 +52,7 @@ button {
     width: 6px;
     border-radius: 5px;
     top: 12px;
-    background: #800080;
+    background: #5030e5;
 }
 
 .bullet-orange {

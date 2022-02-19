@@ -4,7 +4,7 @@ import Logo from './../Logo/index';
 function SideBar() {
 
   const links = [
-    { title: 'Community Setup', url: '' },
+    { title: 'Community Setup', url: '', active: true },
     { title: 'Claim Badge', url: '' },
     { title: 'My Profile', url: '' },
     { title: 'Communities', url: '' }
@@ -22,7 +22,7 @@ function SideBar() {
         {
           
           links.map((l, i) => {
-            return <div className='side-bar-link' key={i}>{l.title}</div>;
+            return <div className={`side-bar-link ${l.active ? 'active' : 'not-active'}`} key={i}>{l.title}</div>;
           })
         
         }

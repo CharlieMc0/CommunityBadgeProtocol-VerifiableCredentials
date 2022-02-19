@@ -1,5 +1,5 @@
 
-input {
+.search-wrapper input {
     transition: all 1s ease;
     border: none;
     padding: 12px;

@@ -3,15 +3,15 @@
 
 html, body {
   font-family: 'Inter', sans-serif;
+  background: #e4e4e4;
 }
 
-html, body, #root, .app-wrapper, #root .app .app-row {
+html, body, #root {
   height: 100%;
   min-height: 100%;
 }
 
 .app {
-  height: calc(100% - 54px);
   min-height: calc(100% - 54px);
 }
 
@@ -22,6 +22,10 @@ html, body, #root, .app-wrapper, #root .app .app-row {
 
 .app-col {
   flex-grow: 1;
+}
+
+.app-col.main {
+  border-left: 1px solid #DBDBDB;
 }
 
 .app {
@@ -38,17 +42,18 @@ html, body, #root, .app-wrapper, #root .app .app-row {
 }
 
 .app-wrapper {
+  min-width: 1165px;
   padding: 24px 24px 24px 24px;
-  background: #e4e4e4;
 }
 
 .header {
   height: 88px;
-  width: 100%;
+  /* width: 100%; */
   flex-grow: 1;
 }
 
 .header.main {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }

@@ -5,3 +5,65 @@
     border-radius: 12px;
     margin: 12px 0;
 }
+
+input {
+    transition: all 1s ease;
+    border: none;
+    padding: 12px;
+    background-color: #f5f5f5;
+    outline-color: lightgray;
+    width: 90%;
+}
+
+.custom-select select {
+    min-width: 100px;
+    border-radius: 5px;
+    padding: 4px;
+}
+
+input[type=number] {
+    width: 70px;
+    border-radius: 5px;
+    height: 0;
+    background: white;
+    border: 1px solid grey;
+}
+
+/* input[type=file] {
+    width: 350px;
+    height: 70px;
+    padding: 10px;
+    background-color: #f5f5f5;
+} */
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    padding: 40px 0;
+    color: grey;
+    background-color: #f5f5f5;
+}
+
+.toggle-button {
+    background-color: #3c62b6;
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.toggle-button.selected {
+    background-color: lightgray;
+}
