@@ -1,7 +1,12 @@
 
-data "aws_ssm_parameter" "private_key" { 
+data "aws_ssm_parameter" "eth_private_key" { 
   // TODO - Get rid of this and pull from SSM in the function
   name = "/${var.project_name}/eth_wallet_private_key"
+}
+
+data "aws_ssm_parameter" "skale_private_key" { 
+  // TODO - Get rid of this and pull from SSM in the function
+  name = "/${var.project_name}/skale_wallet_private_key"
 
 }
 resource "aws_lambda_layer_version" "nodejs_layer" {
@@ -60,7 +65,8 @@ resource "aws_lambda_function" "chain_functions" {
   environment {
     variables = {
       "PROJECT_NAME" = var.project_name
-      "WALLETPRIVKEY" = data.aws_ssm_parameter.private_key.value
+      "ETHWALLETPRIVKEY" = data.aws_ssm_parameter.eth_private_key.value
+      "SKALEPRIVKEY" = data.aws_ssm_parameter.skale_private_key.value
     }
   }
 

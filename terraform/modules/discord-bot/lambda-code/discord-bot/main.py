@@ -31,13 +31,15 @@ votes_table_name = os.environ['VOTE_TABLE']
 base_uri = "Uri.com/"
 
 client_lambda = boto3.client('lambda')
+chain = "skale"
 
-
-def mint():
+def mint(to_address="0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A"):
+    if chain == "skale":
+        to_address = "0x5F3feb74f82C5c7033Cf9135eb44672DB84D48f6"
     event = {
     "command": "mint",
         "mintOptions": {
-        "toAddress": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A",
+        "toAddress": to_address,
         "tokenId": "1",
         "quantity": "1"
         }
@@ -124,15 +126,15 @@ def lambda_handler(event, context):
 
             if command_name == "community-badges":
                 subcommand = message_body['data']['options'][0]['name']
-
+                nomination_id = server_config['NominationId']
                 print(f"server_config: {server_config}")
+
 
                 if subcommand == "vote":
 
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     vote = message_body['data']['options'][0]['options'][1]['value']
 
-                    nomination_id = server_config['NominationId']
 
                     print(f"nominated_user: {nominated_user}")
                     print(f"vote: {vote}")

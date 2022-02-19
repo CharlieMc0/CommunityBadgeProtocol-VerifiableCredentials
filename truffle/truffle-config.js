@@ -54,17 +54,17 @@ module.exports = {  /**
      },
   
     // Set default mocha options here, use special reporters etc.
-    // mocha: {
-    //   reporter: 'eth-gas-reporter',
-    //   reporterOptions : { 
-    //     currency: 'USD',
-    //     token: 'ETH',
-    //     onlyCalledMethods: true,
-    //     excludeContracts: [],
-    //     gasPrice: 100,
-    //     coinmarketcap: "9b39d8f5-c600-42b5-add1-3a8dc3fc52f5" // TODO - API Keys should be securely stored!
-    //    }
-    // },
+    mocha: {
+      reporter: 'eth-gas-reporter',
+      reporterOptions : { 
+        currency: 'USD',
+        token: 'ETH',
+        onlyCalledMethods: true,
+        excludeContracts: [],
+        gasPrice: 100,
+        coinmarketcap: "9b39d8f5-c600-42b5-add1-3a8dc3fc52f5" // TODO - API Keys should be securely stored!
+       }
+    },
   
     // Configure your compilers
     compilers: {
