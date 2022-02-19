@@ -42,6 +42,7 @@ resource "aws_api_gateway_resource" "discord_bot" {
   rest_api_id = aws_api_gateway_rest_api.discord_bot.id
 }
 
+
 resource "aws_api_gateway_method" "discord_bot" {
   authorization = "NONE"
   http_method   = "POST"
@@ -116,3 +117,52 @@ resource "aws_api_gateway_stage" "discord_bot" {
 
 }
 
+
+
+## Create New Profile 
+resource "aws_api_gateway_resource" "create_profile" {
+  parent_id   = aws_api_gateway_rest_api.discord_bot.root_resource_id
+  path_part   = "create-profile"
+  rest_api_id = aws_api_gateway_rest_api.discord_bot.id
+}
+
+resource "aws_api_gateway_method" "create_profile" {
+  authorization = "NONE"
+  http_method   = "POST"
+  resource_id   = aws_api_gateway_resource.create_profile.id
+  rest_api_id   = aws_api_gateway_rest_api.discord_bot.id
+}
+
+resource "aws_api_gateway_integration" "create_profile" {
+  rest_api_id             = aws_api_gateway_rest_api.discord_bot.id
+  resource_id             = aws_api_gateway_resource.create_profile.id
+  http_method             = aws_api_gateway_method.discord_bot.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.create_profile.invoke_arn
+
+  credentials = aws_iam_role.discord_bot.arn
+
+}
+
+# resource "aws_api_gateway_method_response" "profile_200" {
+#   rest_api_id = aws_api_gateway_rest_api.discord_bot.id
+#   resource_id = aws_api_gateway_resource.discord_bot.id
+#   http_method = aws_api_gateway_method.discord_bot.http_method
+#   status_code = "200"
+# }
+
+# resource "aws_api_gateway_method_response" "profile_401" {
+#   rest_api_id = aws_api_gateway_rest_api.discord_bot.id
+#   resource_id = aws_api_gateway_resource.discord_bot.id
+#   http_method = aws_api_gateway_method.discord_bot.http_method
+#   status_code = "401"
+# }
+
+## Create New Award 
+
+resource "aws_api_gateway_resource" "create_award" {
+  parent_id   = aws_api_gateway_rest_api.discord_bot.root_resource_id
+  path_part   = "create-award"
+  rest_api_id = aws_api_gateway_rest_api.discord_bot.id
+}

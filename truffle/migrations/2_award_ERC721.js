@@ -1,5 +1,5 @@
-const Awards = artifacts.require("Award");
+const Badges = artifacts.require("Badge");
 
 module.exports = function (deployer) {
-  deployer.deploy(Awards);
+  deployer.deploy(Badges);
 };

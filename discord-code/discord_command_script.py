@@ -127,8 +127,8 @@ def nominate():
 
 def add_command_group():
     json = {
-        "name": "excellence-award",
-        "description": "Nominate or vote on an excellence award",
+        "name": "community-badges",
+        "description": "Nominate or vote a member for a community badge or award",
         "options": [
             {
                 "name": "nominate",
@@ -138,7 +138,20 @@ def add_command_group():
                         "name": "username",
                         "description": "The username in @username format",
                         "type": 3,
-                        "required": True}
+                        "required": True
+                    },
+                    {
+                        "name": "badge-name",
+                        "description": "The name of the badge",
+                        "type": 3,
+                        "required": True
+                        },
+                    {
+                        "name": "reason",
+                        "description": "Why are they being nominated for this badge?",
+                        "type": 3,
+                        "required": True
+                        }
                 ]
             },
             {
@@ -154,7 +167,7 @@ def add_command_group():
                     },
                     {
                         "name": "your_vote",
-                        "description": "Are you voting in favor or against their nomination for excellence?",
+                        "description": "Are you voting in favor or against their nomination?",
                         "type": 3,
                         "required": True,
                         "choices": [
@@ -167,6 +180,31 @@ def add_command_group():
                                 "value": "no"
                             },
                         ]
+                    },
+                ]
+            },
+            {
+                "name": "create-new-badge",
+                "description": "Create a new badge or award",
+                "type": 1,
+                "options": [
+                    {
+                        "name": "badge-name",
+                        "description": "The name of the badge",
+                        "type": 3,
+                        "required": True,
+                    },
+                    {
+                        "name": "badge-description",
+                        "description": "Description of the badge in less than 280 characters",
+                        "type": 3,
+                        "required": True,
+                    },
+                    {
+                        "name": "badge-limit",
+                        "description": "Is there a limit of the number of badges that can be issued? (Optional)",
+                        "type": 3,
+                        "required": False,
                     },
                 ]
             }
@@ -194,5 +232,5 @@ def delete_command(command_id):
 # nominate()
 add_command_group()
 
-# delete_command("935699121757630516")
-# delete_command("935698594734952468")
+# delete_command("943266707496140892")
+# delete_command("943334738477862923")

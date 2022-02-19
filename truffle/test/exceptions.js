@@ -1,6 +1,7 @@
 // const PREFIX = "Returned error: VM Exception while processing transaction: ";
 // const PREFIX = "Error: ";
 const PREFIX = "Transaction: ";
+
 // Todo - Figure out why the errors don't report back from solidity as exepcted 
 
 async function tryCatch(promise, message) {
@@ -23,5 +24,6 @@ module.exports = {
     catchStackUnderflow    : async function(promise) {await tryCatch(promise, "stack underflow"    );},
     catchStaticStateChange : async function(promise) {await tryCatch(promise, "static state change");},
     catchAll               : async function(promise) {await tryCatch(promise, ""                      );},
+    catchTransfer               : async function(promise) {await tryCatch(promise, ""                      );},
 
 };

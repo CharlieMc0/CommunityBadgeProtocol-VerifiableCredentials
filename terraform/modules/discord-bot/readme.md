@@ -3,6 +3,11 @@
 ### Notes 
 Some requirements needed to be built on EC2. The Layer Zip file is included in this repo for conviencne. If you need to rebuild the layer do it on an EC2 instance or via CodeBuild. 
 
+### TODO 
+
+* Break module up - Lambda Functions and API Gateway should be seperate modules 
+* Move Lambda code out of modules
+
 
 ## Providers
 

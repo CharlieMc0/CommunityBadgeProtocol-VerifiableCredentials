@@ -18,3 +18,9 @@ module "discord_bot" {
 output "discord_interactions_url" {
   value = module.discord_bot.discord_interactions_url
 }
+
+module "s3_asset_bucket" {
+  source                  = "../../modules/s3"
+  name                    = "${var.project_name}-asset-bucket-${data.aws_caller_identity.current.account_id}"
+  block_all_public_access = false # TODO: This should be flipped to true at some point
+}
