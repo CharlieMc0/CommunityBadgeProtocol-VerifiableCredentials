@@ -11,41 +11,35 @@ import ToggleButtonWidget from '../../components/SettingsWidget/toggleButtonWidg
 function CommunitySetUp() {
 
   let postData = {
-    whoCanNominate: { admin: true, modifiers: true, members: true },
-    whoCanBeNominated: { admin: true, modifiers: true, members: true },
-    whoCanVote: { admin: true, modifiers: true, members: true },
-    votingPeriodFrequency: "days",
-    votingPeriodValue: "1",
-    votingType: "binary",
-    name: "",
-    logo: "",
-    bio: ""
+    "whoCanNominate": { "admin": true, "modifiers": true, "members": true },
+    "whoCanBeNominated": { "admin": true, "modifiers": true, "members": true },
+    "whoCanVote": { "admin": true, "modifiers": true, "members": true },
+    "votingPeriodFrequency": "days",
+    "votingPeriodValue": "1",
+    "votingType": "binary",
+    "name": undefined,
+    "logo": undefined,
+    "bio": undefined
   };
 
   async function postDataEvt(url = '', data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'no-cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     return response.json(); // parses JSON response into native JavaScript objects
   }
 
   const postForm = () => {  
-  
-    postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', JSON.stringify(postData))
+    postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', postData)
       .then(data => {
         console.log(data);
-      });
+      }).catch(err => {
+        console.log(err);
+      })
   }
 
   const formUpdate = (evt) => {
