@@ -4,8 +4,8 @@ function InputNumberWidget(props) {
 
     return (
         <div className="widget-wrapper">
-
-            <input type='number' placeholder="1" onKeyUp={e => props.update(e.target.value, props.dataKey)} />
+            
+            <input type='number' placeholder="1" onKeyUp={e => props.update({ dataValue: e.target.value, dataKey: props.dataKey })} />
 
         </div>
     );
