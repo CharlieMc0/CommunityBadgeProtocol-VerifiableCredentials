@@ -5,8 +5,9 @@
 # See if the UI/UX within Discord can be improved
 # Setup logic for end of voting period
 # Better error checking
-# Send link to claim badge 
-# Connurecy checking to make sure nominate ID is incrementing correctly 
+# Send link to claim badge
+# Connurecy checking to make sure nominate ID is incrementing correctly
+# Move Webhoos into Chain function and only send after a successful tx
 
 from logging import raiseExceptions
 import boto3
@@ -28,6 +29,43 @@ access_token = os.environ['ACCESS_TOKEN']
 config_table_name = os.environ['SERVER_CONFIG_TABLE']
 votes_table_name = os.environ['VOTE_TABLE']
 base_uri = "Uri.com/"
+
+client_lambda = boto3.client('lambda')
+
+
+def mint():
+    event = {
+    "command": "mint",
+        "mintOptions": {
+        "toAddress": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A",
+        "tokenId": "1",
+        "quantity": "1"
+        }
+    }
+    response = client_lambda.invoke(
+      FunctionName='arn:aws:lambda:us-east-1:542292791691:function:chain-functions-ethdenver-hackathon',
+      InvocationType='Event',
+      Payload=json.dumps(event)
+    )
+
+
+
+def create_new_token(badge_limit, badge_name, badge_uri):
+    event = {
+      "command": "newBadge",
+      "newBadgeOptions": {
+        "badgeCreator": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A",
+        "badgeName": badge_name,
+        "metadataURI": badge_uri,
+        "badgeLimit": badge_limit,
+      },
+    }
+    response = client_lambda.invoke(
+        FunctionName = 'arn:aws:lambda:us-east-1:542292791691:function:chain-functions-ethdenver-hackathon',
+        InvocationType = 'Event',
+        Payload = json.dumps(event)
+    )
+
 
 def lambda_handler(event, context):
 
@@ -103,6 +141,9 @@ def lambda_handler(event, context):
                     add_vote_to_table(server_id, nomination_id,
                                       nominated_user, user_id, vote)
 
+                    # TODO - Mint after vote concludes 
+                    mint()
+
                     return return_message("Your vote has been cast")
 
                 elif subcommand == "nominate":
@@ -110,10 +151,12 @@ def lambda_handler(event, context):
                     badge_name = message_body['data']['options'][0]['options'][1]['value']
                     nomination_reason = message_body['data']['options'][0]['options'][2]['value']
                     # nomination_id = server_config['NominationId'] + 1
-
+                    
                     print(f"nominated_user: {nominated_user}")
                     send_nomination_message(
                         nomination_reason, nominated_user, badge_name, user_id)
+
+
                     return return_message("Nomination Complete" + nomination_id )
 
                 elif subcommand == "create-new-badge":
@@ -126,11 +169,9 @@ def lambda_handler(event, context):
                         print(e)
                         badge_limit = 0
 
-
-                    # TODO - Mint Badge
-                    # create_new_token(badge_limit, badge_name, badge_uri)
-
                     send_new_badge_message(badge_name, badge_description, user_id, webhook_url=None)
+                    create_new_token(badge_limit, badge_name, badge_uri)
+
 
                     return return_message("Badge Creation Complete")
 
@@ -298,31 +339,31 @@ def add_vote_to_table(server_id, vote_id, nominated_user_id, voter_id, vote, dyn
 
 
 
-#####
-def add_wallet_to_db(wallet_address, discord_userid, dynamodb=None, table=None):
-    try:
-        if not dynamodb:
-            dynamodb = boto3.resource('dynamodb')
-        if not table:
-            table = dynamodb.Table(config_table_name)
+# #####
+# def add_wallet_to_db(wallet_address, discord_userid, dynamodb=None, table=None):
+#     try:
+#         if not dynamodb:
+#             dynamodb = boto3.resource('dynamodb')
+#         if not table:
+#             table = dynamodb.Table(config_table_name)
 
-        response = table.put_item(
-            Item={
-                'DiscordUserId': discord_userid,
-                'WalletAddress': wallet_address,
-                'Processed': "False"
-            }
-        )
-        if not response['ResponseMetadata']['HTTPStatusCode'] == 200:
-            print(response)
-            raise Exception("Unable to Save Item to DynamoDB", response)
-        return
+#         response = table.put_item(
+#             Item={
+#                 'DiscordUserId': discord_userid,
+#                 'WalletAddress': wallet_address,
+#                 'Processed': "False"
+#             }
+#         )
+#         if not response['ResponseMetadata']['HTTPStatusCode'] == 200:
+#             print(response)
+#             raise Exception("Unable to Save Item to DynamoDB", response)
+#         return
 
-    except Exception as e:
-        print(response)
-        print(e)
-        raise Exception(
-            "Sorry, something went wrong. Please tag an admin")
+#     except Exception as e:
+#         print(response)
+#         print(e)
+#         raise Exception(
+#             "Sorry, something went wrong. Please tag an admin")
 
 
 # def get_user_wallet(discord_userid, dynamodb=None, table=None):
@@ -347,100 +388,100 @@ def add_wallet_to_db(wallet_address, discord_userid, dynamodb=None, table=None):
 #         return return_message("Sorry, something went wrong. Please tag an admin")
 
 
-def check_if_user_exists(discord_userid, dynamodb=None, table=None):
-    user_wallet = get_user_wallet(discord_userid, dynamodb, table)
-    if user_wallet is None:
-        print("User Does Not Exist")
-        return
-    else:
-        print("User Does Exists")
-        print(user_wallet)
-        raise ValueError(
-            "Member Already Has A Whitelisted Wallet - Each Member Can Only Whitelist One Wallet Address")
+# def check_if_user_exists(discord_userid, dynamodb=None, table=None):
+#     user_wallet = get_user_wallet(discord_userid, dynamodb, table)
+#     if user_wallet is None:
+#         print("User Does Not Exist")
+#         return
+#     else:
+#         print("User Does Exists")
+#         print(user_wallet)
+#         raise ValueError(
+#             "Member Already Has A Whitelisted Wallet - Each Member Can Only Whitelist One Wallet Address")
 
 
-def check_for_duplicate_wallet_addresses(wallet_address, dynamodb=None, table=None):
-    try:
-        if not dynamodb:
-            dynamodb = boto3.resource('dynamodb')
-        if not table:
-            table = dynamodb.Table(config_table_name)
+# def check_for_duplicate_wallet_addresses(wallet_address, dynamodb=None, table=None):
+#     try:
+#         if not dynamodb:
+#             dynamodb = boto3.resource('dynamodb')
+#         if not table:
+#             table = dynamodb.Table(config_table_name)
 
-        response = table.query(
-            KeyConditionExpression=Key('WalletAddress').eq(wallet_address),
-            IndexName='WalletAddressIndex',
-            Select='COUNT'
-        )
+#         response = table.query(
+#             KeyConditionExpression=Key('WalletAddress').eq(wallet_address),
+#             IndexName='WalletAddressIndex',
+#             Select='COUNT'
+#         )
 
-        if response['Count'] == 0:
-            return True
-        else:
-            raise ValueError("That Wallet Address Has Already Whitelisted")
+#         if response['Count'] == 0:
+#             return True
+#         else:
+#             raise ValueError("That Wallet Address Has Already Whitelisted")
 
-    except Exception as e:
-        raise(e)
-
-
-def check_item_count():
-    try:
-        dynamodb = boto3.client('dynamodb')
-        table = dynamodb.describe_table(
-            TableName=config_table_name
-        )
-        item_count = table['Table']['ItemCount']
-
-        if item_count >= whitelist_capacity:
-            raise ValueError(
-                "The whitelist is full. No more addresses can be added.")
-        else:
-            return
-
-    except Exception as e:
-        raise(e)
+#     except Exception as e:
+#         raise(e)
 
 
-def white_list_wallet_address(message_body, wallet_address, discord_userid):
-    try:
-        verify_discord_role(message_body, whitelist_role_id)
-    except ValueError as e:
-        raise ValueError(
-            "You are not eligible to whitelist your wallet yet")
-    except Exception as e:
-        print(e)
-        raise ValueError(
-            "You are not eligible to whitelist your wallet yet")
+# def check_item_count():
+#     try:
+#         dynamodb = boto3.client('dynamodb')
+#         table = dynamodb.describe_table(
+#             TableName=config_table_name
+#         )
+#         item_count = table['Table']['ItemCount']
 
-    if not validate_eth(wallet_address):
-        raise ValueError(
-            "The wallet address you provided is not valid. Did you use an Ethereum address?")
+#         if item_count >= whitelist_capacity:
+#             raise ValueError(
+#                 "The whitelist is full. No more addresses can be added.")
+#         else:
+#             return
 
-    try:
-        check_item_count()
-        check_if_user_exists(discord_userid, dynamodb=None, table=None)
-        check_for_duplicate_wallet_addresses(
-            wallet_address, dynamodb=None, table=None)
-        add_wallet_to_db(wallet_address, discord_userid,
-                         dynamodb=None, table=None)
-        return
-
-    except ValueError as e:
-        print(e)
-        raise ValueError(e)
+#     except Exception as e:
+#         raise(e)
 
 
-def check_status(message_body, discord_userid, dynamodb=None, table=None):
+# def white_list_wallet_address(message_body, wallet_address, discord_userid):
+#     try:
+#         verify_discord_role(message_body, whitelist_role_id)
+#     except ValueError as e:
+#         raise ValueError(
+#             "You are not eligible to whitelist your wallet yet")
+#     except Exception as e:
+#         print(e)
+#         raise ValueError(
+#             "You are not eligible to whitelist your wallet yet")
 
-    try:
-        verify_discord_role(message_body, whitelist_role_id)
-        print("verified role")
-    except ValueError as e:
-        return "You are not eligible to whitelist your wallet yet"
-    except Exception as e:
-        print(e)
-        return "You are not eligible to whitelist your wallet yet"
+#     if not validate_eth(wallet_address):
+#         raise ValueError(
+#             "The wallet address you provided is not valid. Did you use an Ethereum address?")
 
-    try:
-        check_if_user_exists(discord_userid, dynamodb=None, table=None)
-        return "You are eligible to whitelist but haven't done so yet. Use \"/whitelist add-wallet\" to do so. "
-    except ValueError as e:
-        return "Your wallet has already been whitelisted"
+#     try:
+#         check_item_count()
+#         check_if_user_exists(discord_userid, dynamodb=None, table=None)
+#         check_for_duplicate_wallet_addresses(
+#             wallet_address, dynamodb=None, table=None)
+#         add_wallet_to_db(wallet_address, discord_userid,
+#                          dynamodb=None, table=None)
+#         return
+
+#     except ValueError as e:
+#         print(e)
+#         raise ValueError(e)
+
+
+# def check_status(message_body, discord_userid, dynamodb=None, table=None):
+
+#     try:
+#         verify_discord_role(message_body, whitelist_role_id)
+#         print("verified role")
+#     except ValueError as e:
+#         return "You are not eligible to whitelist your wallet yet"
+#     except Exception as e:
+#         print(e)
+#         return "You are not eligible to whitelist your wallet yet"
+
+#     try:
+#         check_if_user_exists(discord_userid, dynamodb=None, table=None)
+#         return "You are eligible to whitelist but haven't done so yet. Use \"/whitelist add-wallet\" to do so. "
+#     except ValueError as e:
+#         return "Your wallet has already been whitelisted"
