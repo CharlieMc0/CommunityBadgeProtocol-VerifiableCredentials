@@ -1,0 +1,9 @@
+
+.search-wrapper input {
+    transition: all 1s ease;
+    border: none;
+    padding: 12px;
+    background-color: #f5f5f5;
+    outline-color: lightgray;
+    margin: 24px;
+}

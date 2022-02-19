@@ -1,0 +1,59 @@
+
+.logo-wrapper {
+    display: flex;
+    padding: 28px 0 0 24px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    padding: 6px 0 0 8px;
+}
+
+.logo-symbol-wrapper {
+    position: relative;
+    height: 30px;
+    width: 30px;
+    transform: scale(0.6);
+}
+
+.a {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 8.33%;
+    right: 41.67%;
+    top: 42.54%;
+    bottom: 8.33%;
+    background: #9583ef;
+    border-radius: 30px;
+}
+
+.b {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    top: 8.33%;
+    bottom: 41.67%;
+    background: #5030E5;
+    
+    border-radius: 30px;
+}
+
+.c {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 50%;
+    right: 8.33%;
+    top: 42.54%;
+    bottom: 8.33%;
+    background: #b9abf5;
+    border-radius: 30px;
+}
