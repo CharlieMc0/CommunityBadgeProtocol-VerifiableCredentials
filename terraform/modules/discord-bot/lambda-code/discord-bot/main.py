@@ -220,11 +220,6 @@ def send_new_badge_message(badge_name, badge_description, user_id, webhook_url=N
                     "title": "The {} Badge".format(badge_name),
                     "description": "{}".format(badge_description),
                     "color": 5814783
-                },
-                {
-                    "title": "What's A Community Badge?",
-                    "description": "Community Badges are ERC1155 tokens that are created and managed by an organization. Your community is responsible for nominating and voting for a person or group to win the award. Specifics regarding the award such as name, description, quantity available, and who's eligible to receive have been configured by your community leaders. \n\nThe voting period is open for 24 hours. After this time the votes will be tallied and an award may be issued.",
-                    "color": 5814783
                 }
             ]
         }
