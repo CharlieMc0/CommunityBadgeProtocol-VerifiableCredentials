@@ -19,7 +19,6 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
 import requests
-# from chain_functions import mint, create_new_token, publish_metadata
 
 VALID_COMMANDS = ["update_settings", "configure-server", "community-badges",
                   "nominate", "vote", "excellence-award", "create-new-badge"]

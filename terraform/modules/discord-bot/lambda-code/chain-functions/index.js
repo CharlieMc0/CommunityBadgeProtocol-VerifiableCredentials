@@ -1,17 +1,17 @@
 
 // TODO 
-// Setup for Skale - And use SSM 
-// Add token creation event to 1155.sol and listen
-// Put system in place to prevent duplicate tx/Nonce collisions
-// Figure out why pulling from SSM doesn't work and Move params and secrets to SSM 
+// Use SSM instead of Env Variables
+// Add listen for ERC1155 events
+// Put system in place to prevent duplicate tx/Nonce collisions -- Test concurrency
+// Better error handling
+
+let endpointURI;
+let contractAddress;
+let walletAddress;
+let walletPrivateKey;
+let chainId;
 
 let chain ="SKALE"
-    let endpointURI;
-    let contractAddress;
-    let walletAddress;
-    let walletPrivateKey;
-    let chainId;
-
 
 if (chain == "RINKEBY"){
     endpointURI = "https://rinkeby.infura.io/v3/ca42c79b2cd64cd59b28c04c06df2a6f"
@@ -36,36 +36,28 @@ const contractABI = require("./contract-abi.json");
 
 let myContract = new web3.eth.Contract(contractABI, contractAddress);
 
-const AWS = require('aws-sdk');
-const ssm = new AWS.SSM();
- async function getP()
- {
-    var params = {
-        Name: '/ethdenver-hackathon/contract_address', 
-        WithDecryption: true
-    };
-    var request = await ssm.getParameter(params).promise();
-    return request.Parameter.Value;          
-}
+// Not currently working 
+// const AWS = require('aws-sdk');
+// const ssm = new AWS.SSM();
+//  async function getP()
+//  {
+//     var params = {
+//         Name: '/ethdenver-hackathon/contract_address', 
+//         WithDecryption: true
+//     };
+//     var request = await ssm.getParameter(params).promise();
+//     return request.Parameter.Value;          
+// }
 
-async function getParam()
-{
-    var resp = await getP();
-    console.log(resp);
-}
-
+// async function getParam()
+// {
+//     var resp = await getP();
+//     console.log(resp);
+// }
 
 
 exports.handler = async (event) => {
-    // TODO implement
     console.log(event)
-
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-
-    console.log(event["command"])
     
     if (event["command"] == "newBadge") {
         let badgeCreatorAddr = event["newBadgeOptions"]["badgeCreator"]
@@ -73,13 +65,18 @@ exports.handler = async (event) => {
         let metadataURI = event["newBadgeOptions"]["metadataURI"] 
         await createNewBadge(walletAddress, badgeName, metadataURI)
     }
-    if (event["command"] == "mint") {
+    else if (event["command"] == "mint") {
         let toAddress = event["mintOptions"]["toAddress"]
         let tokenId  = event["mintOptions"]["tokenId"]
         await mint(toAddress, tokenId);
     }
 
+    const response = {
+        statusCode: 200,
+        body: JSON.stringify('Executed successfully'),
+    };
     return response;
+
 };
 
 async function createNewBadge(badgeCreatorAddr, badgeName, metadataURI, limit=0) {
