@@ -36,3 +36,5 @@ __pycache__
 
 node_modules
 *.ignore
+*truffle/build*
+truffle/artifacts*
