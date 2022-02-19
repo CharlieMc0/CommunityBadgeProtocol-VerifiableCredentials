@@ -1,0 +1,16 @@
+{
+  "command": "newBadge",
+  "newBadgeOptions": {
+    "badgeCreator": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A",
+    "badgeName": "The Name",
+    "metadataURI": "uri.com/1.json",
+    "badgeLimit": "0",
+    "toAddress": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A"
+  },
+  "mintOptions": {
+    "toAddress": "0x9D60c7529bcB2510e6e059C52b7Ac538dAB8798A",
+    "tokenId": "1",
+    "quantity": "1"
+  }
+
+}

@@ -18,7 +18,7 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from discord_core import verify_signature, return_message, is_ping
 import requests
-from chain_functions import mint, create_new_token, publish_metadata
+# from chain_functions import mint, create_new_token, publish_metadata
 
 VALID_COMMANDS = ["update_settings", "configure-server", "community-badges",
                   "nominate", "vote", "excellence-award", "create-new-badge"]
@@ -63,7 +63,7 @@ def lambda_handler(event, context):
     # Type 2 is a command
     try:
         if message_body['type'] == 2:
-
+            user_id = message_body['member']['user']['id']
             server_id = message_body['guild_id']
             channel_id = message_body['channel_id']
             command_name = message_body['data']['name']
@@ -90,6 +90,7 @@ def lambda_handler(event, context):
                 print(f"server_config: {server_config}")
 
                 if subcommand == "vote":
+
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     vote = message_body['data']['options'][0]['options'][1]['value']
 
@@ -105,11 +106,10 @@ def lambda_handler(event, context):
                     return return_message("Your vote has been cast")
 
                 elif subcommand == "nominate":
-                    user_id = message_body['member']['user']['id']
                     nominated_user = message_body['data']['options'][0]['options'][0]['value']
                     badge_name = message_body['data']['options'][0]['options'][1]['value']
                     nomination_reason = message_body['data']['options'][0]['options'][2]['value']
-                    nomination_id = server_config['NominationId'] + 1
+                    # nomination_id = server_config['NominationId'] + 1
 
                     print(f"nominated_user: {nominated_user}")
                     send_nomination_message(
@@ -117,7 +117,6 @@ def lambda_handler(event, context):
                     return return_message("Nomination Complete" + nomination_id )
 
                 elif subcommand == "create-new-badge":
-                    user_id = message_body['member']['user']['id']
                     badge_name = message_body['data']['options'][0]['options'][0]['value']
                     badge_description = message_body['data']['options'][0]['options'][1]['value']
                     badge_uri = base_uri + server_id + server_config['NominationId']
@@ -129,7 +128,7 @@ def lambda_handler(event, context):
 
 
                     # TODO - Mint Badge
-                    create_new_token(badge_limit, badge_name, badge_uri)
+                    # create_new_token(badge_limit, badge_name, badge_uri)
 
                     send_new_badge_message(badge_name, badge_description, user_id, webhook_url=None)
 
