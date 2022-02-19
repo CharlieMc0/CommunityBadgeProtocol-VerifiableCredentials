@@ -1,0 +1,59 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400&display=swap');
+
+html, body {
+  font-family: 'Inter', sans-serif;
+  background: #e4e4e4;
+}
+
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+}
+
+.app {
+  min-height: calc(100% - 54px);
+}
+
+.app-row {
+  display: flex;
+  width: 100%;
+}
+
+.app-col {
+  flex-grow: 1;
+}
+
+.app-col.main {
+  border-left: 1px solid #DBDBDB;
+}
+
+.app {
+  background: white;
+  border-radius: 20px;
+}
+
+.line-break {
+  border-bottom: 1px solid #DBDBDB;
+}
+
+.gutter {
+  margin: 20px;
+}
+
+.app-wrapper {
+  min-width: 1165px;
+  padding: 24px 24px 24px 24px;
+}
+
+.header {
+  height: 88px;
+  /* width: 100%; */
+  flex-grow: 1;
+}
+
+.header.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

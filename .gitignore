@@ -33,7 +33,6 @@ override.tf.json
 .DS_Store
 secrets*
 __pycache__
-
 node_modules
 *.ignore
 *truffle/build*
