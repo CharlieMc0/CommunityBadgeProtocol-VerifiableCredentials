@@ -1,0 +1,10 @@
+{
+    "server_id":{
+        "name":"",
+        "nominating_roles": [],
+        "voting_roles": [],
+        "eligible_roles": [],
+        "voting_channels": [],
+        "nomination_time": 3600
+    }
+}
