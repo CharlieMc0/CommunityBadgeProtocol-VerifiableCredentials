@@ -1,0 +1,24 @@
+{
+  "description": "Badge Description", 
+  "external_url": "", 
+  "image": "https://images.squarespace-cdn.com/content/v1/614b990e002ad146a5478e8b/1633629568660-ZQ2SYA2991APNC4C7QI6/gwei.png?format=500w", 
+  "name": "Badge Name",
+  "attributes": [ 
+    {
+        "issued_by_group": "Issued By", 
+        "value": "D-123456789"
+      }, 
+      {
+        "issued_by_user": "Issued By User", 
+        "value": "@Username"
+      }, 
+      {
+        "issued_to_group": "Issued To Group", 
+        "value": "N/A"
+      }, 
+      {
+        "issued_to_user": "Issued To User",
+        "value": "@Username"
+      }
+   ]
+}

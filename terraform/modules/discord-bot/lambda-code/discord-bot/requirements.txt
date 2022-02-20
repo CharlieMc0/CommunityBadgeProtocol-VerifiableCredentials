@@ -1,4 +1,0 @@
-regex
-requests
-pynacl
-boto3

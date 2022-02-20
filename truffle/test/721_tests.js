@@ -1,5 +1,5 @@
 // const BigNumber = require("bignumber.js");
-const Contract = artifacts.require("Award");
+const Contract = artifacts.require("Badge");
 
 // prerevealURI = "ipfs://QmWtDnP6XrF8bMLz1wy9J57z1pQYSx7iNwvj2pFH3Y9Eca";
 // baseURI = "ipfs://QmQH2iz4rFM3Jy8VR9reTgU1PZky7mwm8Erem8y5Qkm4FK/";
@@ -8,15 +8,15 @@ const Contract = artifacts.require("Award");
 
 // // TODO - Add isApprovedForAll Tests
 
-contract("Contract", (accounts) => {
+contract("BadgesERC721", (accounts) => {
   let catchRevert = require("./exceptions.js").catchRevert;
   let catchAll = require("./exceptions.js").catchAll;
 
   it("Should Mint", async () => {
     let ContractInstance = await Contract.deployed();
-    await ContractInstance.mintAward(accounts[1], "www.metadata.com/1.json");
-    await ContractInstance.mintAward(accounts[2], "www.metadata.com/2.json");
-    await ContractInstance.mintAward(accounts[3], "www.metadata.com/3.json");
+    await ContractInstance.mintBadge(accounts[1], "www.metadata.com/1.json");
+    await ContractInstance.mintBadge(accounts[2], "www.metadata.com/2.json");
+    await ContractInstance.mintBadge(accounts[3], "www.metadata.com/3.json");
   });
 
 

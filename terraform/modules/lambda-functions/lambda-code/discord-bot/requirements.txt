@@ -1,0 +1,5 @@
+regex
+requests
+boto3
+web3
+pynacl

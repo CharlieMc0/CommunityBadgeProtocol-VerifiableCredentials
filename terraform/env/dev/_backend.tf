@@ -3,10 +3,10 @@ terraform {
   backend "s3" {
     bucket         = "terraform-542292791691"
     dynamodb_table = "terraform-lock"
-    key     = "ethdenver-hackathon.tfstate"
-    region  = "us-east-1"
-    encrypt = "true"
-    profile = "nfty-dev"
+    key            = "ethdenver-hackathon.tfstate"
+    region         = "us-east-1"
+    encrypt        = "true"
+    profile        = "nfty-dev"
   }
 }
 
@@ -23,9 +23,3 @@ terraform {
 provider "aws" {
   region = var.region
 }
-
-# # AWS Region for Cloudfront (ACM certs only supports us-east-1)
-# provider "aws" {
-#   region = "us-east-1"
-#   alias  = "cloudfront"
-# }
