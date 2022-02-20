@@ -8,7 +8,7 @@ import InputNumberWidget from '../../components/SettingsWidget/inputNumberWidget
 import ImageDropWidget from '../../components/SettingsWidget/imageDropWidget';
 import ToggleButtonWidget from '../../components/SettingsWidget/toggleButtonWidget';
 
-function CommunitySetUp() {
+function CommunitySetUp(props) {
 
   let postData = {
     "whoCanNominate": { "admin": true, "modifiers": true, "members": true },
@@ -32,14 +32,15 @@ function CommunitySetUp() {
     return response.json();
   }
 
-  const postForm = () => {  
-    postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', 
-    JSON.stringify(postData))
-      .then(data => {
-        console.log(data);
-      }).catch(err => {
-        console.log(err);
-      })
+  const postForm = () => { 
+    // postDataEvt('https://3355z6o2ll.execute-api.us-east-1.amazonaws.com/ethdenver-hackathon-discord/create-profile', 
+    // JSON.stringify(postData))
+    //   .then(data => {
+    //     console.log(data);
+    //   }).catch(err => {
+    //     console.log(err);
+    //   })
+    props.openModalEvt(false);
   }
 
   const formUpdate = (evt) => {
@@ -70,7 +71,10 @@ function CommunitySetUp() {
           <p>Connect your community's discord and set up how Badges get awarded.</p>
           </div>
           <div>
-            <button className="submit-button" onClick={postForm}>Create</button>
+            <button className="submit-button" onClick={postForm}>
+              { props.loading && <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> }
+              { !props.loading && 'Create' }
+            </button>
           </div>
         </div>
         <div className='settings-panel-wrapper'>
