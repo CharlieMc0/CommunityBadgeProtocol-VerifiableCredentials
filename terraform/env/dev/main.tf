@@ -3,24 +3,20 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 module "discord_bot" {
-  source                    = "../../modules/discord-bot" 
-  project_name              = var.project_name
-  enable_db_backup          = false
-  tags                      = var.common_tags
-  custom_domain_name        = ""
-  certificate_arn           = ""
-  lambda_fn_concurrency     = "-1"
-  # whitelist_capacity        = "1"
-  # discord_whitelist_role_id = "935704301236523048" // THE REAL ONE"923942750838198322"
-  # discord_server_id         = ""
-
+  source                = "../../modules/discord-bot"
+  project_name          = var.project_name
+  enable_db_backup      = false
+  tags                  = var.common_tags
+  custom_domain_name    = ""
+  certificate_arn       = ""
+  lambda_fn_concurrency = "-1"
 }
 output "discord_interactions_url" {
   value = module.discord_bot.discord_interactions_url
 }
 
-module "s3_asset_bucket" {
+module "s3_asset_bucket" { // TODO - Assets should be stored on chain, IPFS, SKALE FS, Ceramic, or other Web3 data storage 
   source                  = "../../modules/s3"
   name                    = "${var.project_name}-asset-bucket-${data.aws_caller_identity.current.account_id}"
-  block_all_public_access = false # TODO: This should be flipped to true at some point
+  block_all_public_access = false
 }

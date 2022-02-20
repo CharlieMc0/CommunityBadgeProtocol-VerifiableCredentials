@@ -1,3 +1,6 @@
+## This file is used to add/remove commands to the bot
+## You must add a secrets.py file and include the bot token as bot_id 
+
 import requests
 from secrets import bot_token
 
