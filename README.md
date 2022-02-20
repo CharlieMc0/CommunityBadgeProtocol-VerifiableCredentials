@@ -21,7 +21,25 @@ Groups can use CBP to recognize and award entities even if those entities are no
 This can be used anywhere you need credentialing or badging. Another great example is online education. CryptoZombies is a very popular Web3 tutorial and an automated tool could be created to assess the contracts deployed by learners and issue a badge if their contract passes 90% of the tests.
 
 ## Folder Structure
-
+```
+.
+├── app
+│   ├── node_modules
+│   ├── public
+│   └── src
+├── magtag
+│   ├── fonts
+│   └── lib
+├── misc
+│   └── mock-data
+├── terraform
+│   ├── env
+│   └── modules
+└── truffle
+    ├── contracts
+    ├── migrations
+    └── test
+```
 ### Terraform - Serverless, NoSQL, Discord Bot
 
 Infrastructure is hosted in AWS because it's my area of web2 expertise but if this project were to continue we would migrate to more web3 friendly tools such as Ceramic or SKALE filesystem for hosting metadata and other data assets.
