@@ -3,7 +3,7 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 module "discord_bot" {
-  source                = "../../modules/discord-bot"
+  source                = "../../modules/lambda-functions"
   project_name          = var.project_name
   enable_db_backup      = false
   tags                  = var.common_tags

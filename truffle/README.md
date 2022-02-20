@@ -1,8 +1,6 @@
 
 
 # SKALE Network Box
-
-![box-artwork](https://github.com/skalenetwork/skale-box/blob/master/truffle-skale.png?raw=true)
   
 -  [Overview](#overview)
 -  [Requirements](#requirements)
